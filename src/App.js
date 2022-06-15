@@ -1,13 +1,14 @@
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Stack, ListItem, Card, CardContent, Typography, IconButton, Icon } from '@mui/material';
 import './Style.css';
 import { formState, useForm } from 'react-hook-form'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function App() {
 
     const { register, handleSubmit, reset } = useForm();
-    const [task, setTask] = useState();
+    const [task, setTask] = useState([]);
 
     const onSubmitHandler = (data) => {
         console.log(data);
@@ -39,6 +40,11 @@ function App() {
         return () => clearInterval(id);
     }, [task]);
 
+    function del() {
+        axios.delete('http://localhost:5000').then(response => {
+
+        })
+    }
 
 
     return (
@@ -51,7 +57,22 @@ function App() {
                         <p></p>
                         <button type='submit'>submit</button>
                     </form>
-                    {task.map(taskNeat => <h3 key={taskNeat.id}>{taskNeat.task}</h3>)}
+                    {/* {task.map(taskNeat => <h2 key={taskNeat.id}>{taskNeat.task}</h2>)} */}
+                    {task.map(taskNeat => <Card key={taskNeat.id} className="myCard">{taskNeat.task}
+                        {/* <Button
+                            style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
+                            variant='contained'
+                            className='DelButton'
+                            startIcon={<DeleteIcon />}
+                            onClick={del}
+                        >Delete</Button> */}
+                        <DeleteIcon
+                            style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
+                            color='primary'
+                            onClick={del}
+                            
+                            ></DeleteIcon>
+                    </Card>)}
                 </div>
             </header>
         </div>

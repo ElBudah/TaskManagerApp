@@ -6,7 +6,7 @@ const addTask = async (req,res) => {
 
     let taksName = req.body.task;
 
-    Task.create({
+    await Task.create({
         task: taksName
     })
 
@@ -28,6 +28,23 @@ const getTask = async (req,res) => {
     return res.json(AllData);
 }
 
+const deleteTask = async (req,res) => {
+    const database = require('../db');
+    const Task = require('../tasks');
+    await database.sync();
+
+    let getId = req.body.idbutton;
+
+    await Task.destroy({
+        where: {
+            id: getId
+        }
+    })
+
+    res.send('ok');
+    
+}
+
 module.exports = {
-    addTask, getTask
+    addTask, getTask, deleteTask
 }
