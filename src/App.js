@@ -41,37 +41,45 @@ function App() {
     }, [task]);
 
     function del() {
-        axios.delete('http://localhost:5000').then(response => {
+        
+        let id = window.localStorage.getItem('id');
+        
+        axios.delete('http://localhost:5000', {
+            data: {
+                idselected : id
+            }
+        }).then(response => {
 
         })
     }
+
 
 
     return (
         <div className="App">
             <header className="App-header">
                 <h3>Enter your new Task</h3>
-                <div>
+                <div className='test'>
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
                         <input {...register('task')} ></input>
                         <p></p>
                         <button type='submit'>submit</button>
                     </form>
                     {/* {task.map(taskNeat => <h2 key={taskNeat.id}>{taskNeat.task}</h2>)} */}
-                    {task.map(taskNeat => <Card key={taskNeat.id} className="myCard">{taskNeat.task}
-                        {/* <Button
-                            style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
-                            variant='contained'
-                            className='DelButton'
-                            startIcon={<DeleteIcon />}
-                            onClick={del}
-                        >Delete</Button> */}
-                        <DeleteIcon
-                            style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
-                            color='primary'
-                            onClick={del}
-                            
+                    {task.map(taskNeat => <Card 
+                        key={taskNeat.id}
+                        onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
+                        className="myCard">{taskNeat.task}
+                        
+                        <div className='delb'>
+                            <DeleteIcon
+                                style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
+                                color='primary'
+                                onClick={del}
                             ></DeleteIcon>
+
+                        </div>
+
                     </Card>)}
                 </div>
             </header>

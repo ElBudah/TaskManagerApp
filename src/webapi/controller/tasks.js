@@ -33,7 +33,10 @@ const deleteTask = async (req,res) => {
     const Task = require('../tasks');
     await database.sync();
 
-    let getId = req.body.idbutton;
+    
+    let getId = req.body.idselected;
+
+    console.log(getId);
 
     await Task.destroy({
         where: {
