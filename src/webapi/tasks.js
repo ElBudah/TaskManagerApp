@@ -11,6 +11,9 @@ const Task = database.define('taskmanager', {
     task: {
         type: Sequelize.STRING,
         allowNull: false,
+    },
+    status: {
+        type: Sequelize.BOOLEAN,
     }
 
 })

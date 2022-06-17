@@ -48,6 +48,30 @@ const deleteTask = async (req,res) => {
     
 }
 
+const doneTask = async (req,res) => {
+    const database = require('../db');
+    const Task = require('../tasks');
+    await database.sync();
+
+    let getId = req.body.idselected;
+    let TaskDone = false;
+    if (getId !== 0){
+        TaskDone = true
+    }
+    
+    console.log(getId);
+
+    await Task.update(
+        {status : TaskDone},
+        {where: {
+            id: getId
+        }}
+    )
+
+    res.send('ok');
+}
+
+
 module.exports = {
-    addTask, getTask, deleteTask
+    addTask, getTask, deleteTask, doneTask
 }

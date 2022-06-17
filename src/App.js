@@ -4,6 +4,7 @@ import { formState, useForm } from 'react-hook-form'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
 
 function App() {
 
@@ -40,19 +41,34 @@ function App() {
         return () => clearInterval(id);
     }, [task]);
 
+
+    //Delete task function
     function del() {
-        
+
         let id = window.localStorage.getItem('id');
-        
-        axios.delete('http://localhost:5000', {
+
+        axios.delete('http://localhost:5000/delete', {
             data: {
-                idselected : id
+                idselected: id
             }
         }).then(response => {
 
         })
     }
 
+
+    //Finish task function
+    function check(){
+        let id  = window.localStorage.getItem('id');
+
+        axios.delete('http://localhost:5000/done', {
+            data: {
+                idselected : id
+            }
+        }).then(resp => {
+
+        })
+    }
 
 
     return (
@@ -66,17 +82,23 @@ function App() {
                         <button type='submit'>submit</button>
                     </form>
                     {/* {task.map(taskNeat => <h2 key={taskNeat.id}>{taskNeat.task}</h2>)} */}
-                    {task.map(taskNeat => <Card 
+                    {task.map(taskNeat => <Card
                         key={taskNeat.id}
                         onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
                         className="myCard">{taskNeat.task}
-                        
-                        <div className='delb'>
+
+                        <div className='interactions'>
                             <DeleteIcon
-                                style={{ float: 'right', marginRight: '20px', marginTop: '5px' }}
+                                style={{ float: 'right', marginRight: '10px', marginTop: '5px' }}
                                 color='primary'
                                 onClick={del}
                             ></DeleteIcon>
+                            <CheckIcon
+                                style={{ float: 'right', marginRight: '10px', marginTop: '5px' }}
+                                color='success'
+                                onClick={check}
+                            >
+                            </CheckIcon>
 
                         </div>
 
