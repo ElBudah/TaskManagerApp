@@ -16,8 +16,15 @@ div.App {
     align-items: center;
 }
 
+div.textTask{
+    margin-top: 15px;
+    float: left;
+    margin-left: 20px;
+}
+
 div.interactions{
+    margin-top: 10px;
     float: right;
-    margin-left: auto;
+    margin-left: 70px;
 }
 

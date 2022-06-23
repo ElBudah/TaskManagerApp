@@ -58,12 +58,12 @@ function App() {
 
 
     //Finish task function
-    function check(){
-        let id  = window.localStorage.getItem('id');
+    function check() {
+        let id = window.localStorage.getItem('id');
 
         axios.delete('http://localhost:5000/done', {
             data: {
-                idselected : id
+                idselected: id
             }
         }).then(resp => {
 
@@ -84,22 +84,23 @@ function App() {
                     {/* {task.map(taskNeat => <h2 key={taskNeat.id}>{taskNeat.task}</h2>)} */}
                     {task.map(taskNeat => <Card
                         key={taskNeat.id}
+                        style={{ textDecoration: taskNeat.status ? 'line-through' : 'none' }}
                         onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                        className="myCard">{taskNeat.task}
+                        className="myCard">
 
+                        {taskNeat.task}
                         <div className='interactions'>
                             <DeleteIcon
-                                style={{ float: 'right', marginRight: '10px', marginTop: '5px' }}
+                                style={{ float: 'right', marginLeft: '10px', marginTop: '5px' }}
                                 color='primary'
                                 onClick={del}
                             ></DeleteIcon>
                             <CheckIcon
-                                style={{ float: 'right', marginRight: '10px', marginTop: '5px' }}
+                                style={{ float: 'right', marginTop: '5px' }}
                                 color='success'
                                 onClick={check}
                             >
                             </CheckIcon>
-
                         </div>
 
                     </Card>)}
