@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const addTask = async (req,res) => {
     const database = require('../db');
     const Task = require('../tasks');
@@ -14,6 +16,7 @@ const addTask = async (req,res) => {
 }
 
 const getTask = async (req,res) => {
+    
     const database = require('../db');
     const Task = require('../tasks');
 
@@ -71,7 +74,24 @@ const doneTask = async (req,res) => {
     res.send('ok');
 }
 
+const jwtValidation = async (req,res) => {
+    const token = jwt.sign({userId : 1}, 'blabla', {
+        expiresIn: 300
+    })
+    res.json({auth: true, token}) 
+    
+}
+
+function verifyJWT(req,res, next){
+    const token = req.headers['x-access-token'];
+    jwt.verify(token, 'blabla', (err, decoded) => {
+        if(err) return res.status(401).end();
+
+        req.userId = decoded.userId;
+        next();
+    }) 
+}
 
 module.exports = {
-    addTask, getTask, deleteTask, doneTask
+    addTask, getTask, deleteTask, doneTask, jwtValidation, verifyJWT
 }

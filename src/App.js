@@ -37,7 +37,7 @@ function App() {
     const clock = 5000;
     useEffect(() => {
         const id = setInterval(() => {
-            axios.get('http://localhost:5000').then(resp => {
+            axios.get('http://localhost:5000/').then(resp => {
                 setTask(resp.data);
             })
         }, clock);
@@ -73,6 +73,13 @@ function App() {
         })
     }
 
+    function log() {
+        axios.post('http://localhost:5000/login').then(resp => {
+                console.log(resp.data);
+        })
+
+    }
+
 
     return (
         <div className="App">
@@ -81,8 +88,6 @@ function App() {
                 <div className='test'>
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
                         <input {...register('task')} autoComplete='off' ></input>
-                        <p></p>
-                        <button type='submit'>submit</button>
                         <p></p>
                         <Button type='submit' color='secondary' variant='contained'>Submit</Button>
                     </form>
@@ -149,8 +154,15 @@ function App() {
                         >
                             {taskNeat.task}
                         </Button>)}
-
                     </Stack>
+
+                    <Button
+                    style ={{ marginTop : '10px'}}
+                        variant='contained'
+                        color='secondary'
+                        onClick={log}>
+                            Login
+                    </Button>
 
                 </div>
             </header>
