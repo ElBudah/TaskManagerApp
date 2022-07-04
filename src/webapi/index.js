@@ -2,15 +2,13 @@ const express = require('express');
 const router = require('./routes/routes');
 const app = express();
 const cors = require('cors');
-const routerjwt = require('./routes/routejwt');
-const { verifyJWT } = require('./controller/tasks');
+const cookie = require('cookie-parser')
 
 app.use(express.json());
 app.use(cors());
+app.use(cookie())
 
 app.use('/', router);
-
-app.use('/login', routerjwt);
 
 const port = 5000;
 

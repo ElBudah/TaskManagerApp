@@ -1,6 +1,10 @@
+const express = require('express');
+const app = express();
 const jwt = require('jsonwebtoken');
+const cookie = require('cookie-parser');
+app.use(cookie());
 
-const addTask = async (req,res) => {
+const addTask = async (req, res) => {
     const database = require('../db');
     const Task = require('../tasks');
 
@@ -15,8 +19,8 @@ const addTask = async (req,res) => {
     res.send('ok');
 }
 
-const getTask = async (req,res) => {
-    
+const getTask = async (req, res) => {
+
     const database = require('../db');
     const Task = require('../tasks');
 
@@ -25,18 +29,18 @@ const getTask = async (req,res) => {
     const AllData = await Task.findAll({
         raw: true
     })
-    
+
     console.log(AllData)
 
     return res.json(AllData);
 }
 
-const deleteTask = async (req,res) => {
+const deleteTask = async (req, res) => {
     const database = require('../db');
     const Task = require('../tasks');
     await database.sync();
 
-    
+
     let getId = req.body.idselected;
 
     console.log(getId);
@@ -48,50 +52,43 @@ const deleteTask = async (req,res) => {
     })
 
     res.send('ok');
-    
+
 }
 
-const doneTask = async (req,res) => {
+const doneTask = async (req, res) => {
     const database = require('../db');
     const Task = require('../tasks');
     await database.sync();
 
     let getId = req.body.idselected;
     let TaskDone = false;
-    if (getId !== 0){
+    if (getId !== 0) {
         TaskDone = true
     }
-    
+
     console.log(getId);
 
     await Task.update(
-        {status : TaskDone},
-        {where: {
-            id: getId
-        }}
+        { status: TaskDone },
+        {
+            where: {
+                id: getId
+            }
+        }
     )
 
     res.send('ok');
 }
 
-const jwtValidation = async (req,res) => {
-    const token = jwt.sign({userId : 1}, 'blabla', {
-        expiresIn: 300
-    })
-    res.json({auth: true, token}) 
-    
+const jwtSign = async (req, res) => {
+    const token = jwt.sign({ userID: 1 }, 'test123', { expiresIn: 7000 })
+    console.log(token)
+    res.cookie('token', token, {
+        httpOnly: true
+    }).send(token);
 }
 
-function verifyJWT(req,res, next){
-    const token = req.headers['x-access-token'];
-    jwt.verify(token, 'blabla', (err, decoded) => {
-        if(err) return res.status(401).end();
-
-        req.userId = decoded.userId;
-        next();
-    }) 
-}
 
 module.exports = {
-    addTask, getTask, deleteTask, doneTask, jwtValidation, verifyJWT
+    addTask, getTask, deleteTask, doneTask, jwtSign
 }

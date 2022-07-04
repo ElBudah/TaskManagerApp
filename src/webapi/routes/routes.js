@@ -1,12 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const routerLogin = express.Router();
+const jwt = require('jsonwebtoken');
 
-const { addTask, getTask, deleteTask, doneTask, jwtValidation, verifyJWT } = require('../controller/tasks');
+const verifyJWT = (req, res, next) => {
 
-router.route('/').post(verifyJWT,addTask).get(verifyJWT, getTask);
-router.route('/delete').delete(deleteTask);
-router.route('/done').delete(doneTask);
+    const token = req.cookies.token;
+    console.log('Valor do token: ' + token);
+    jwt.verify(token, 'test123', (err, decoded) => {
+        if (err) {
+            console.log(err)
+            return res.sendStatus(401).end();
+        }
+        next();
+    })
+}
+
+const { addTask, getTask, deleteTask, doneTask, jwtSign } = require('../controller/tasks');
+
+router.post('/', verifyJWT ,addTask).get('/', getTask);
+router.delete('/delete', deleteTask);
+router.delete('/done', doneTask);
+
+router.post('/login', jwtSign);
 
 
 module.exports =  router;
