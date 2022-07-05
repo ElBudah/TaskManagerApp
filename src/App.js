@@ -101,10 +101,6 @@ function App() {
         })
     }
 
-    function testPath() {
-        alert('test')
-    }
-
     return (
         <div className="App">
             <header className="App-header">
@@ -206,11 +202,7 @@ function App() {
                         destroy
                     </Button>
                     <p></p>
-                    <InboxIcon
-                        onClick={testPath}
-                    >
-
-                    </InboxIcon>
+                    
                     <List>
                         {task.map(taskNeat => <ListItem
                             key={taskNeat.id}
