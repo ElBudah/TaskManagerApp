@@ -1,4 +1,4 @@
-import { TextField, Button, Stack, ListItem, Card, CardContent, Typography, IconButton, Icon } from '@mui/material';
+import { TextField, Button, Stack, ListItem, Card, CardContent, Typography, IconButton, Icon, createTheme } from '@mui/material';
 import './Style.css';
 import { formState, useForm } from 'react-hook-form'
 import { useState, useEffect } from 'react';
@@ -6,6 +6,15 @@ import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import Chip from '@mui/material/Chip';
+import InboxIcon from '@mui/icons-material/Inbox';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import DraftsIcon from '@mui/icons-material/Drafts';
+
 
 
 function App() {
@@ -15,7 +24,7 @@ function App() {
 
     const onSubmitHandler = (data) => {
         console.log(data);
-        axios.post('http://localhost:5000/', data, {withCredentials: true, credentials: 'include'}).then(response => {
+        axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(response => {
 
         })
         reset();
@@ -74,24 +83,27 @@ function App() {
     }
 
     function log() {
-        axios.post('http://localhost:5000/login', {}, {withCredentials: true, credentials: 'include'}).then(resp => {
+        axios.post('http://localhost:5000/login', {}, { withCredentials: true, credentials: 'include' }).then(resp => {
             console.log(resp.data);
         })
 
     }
 
     function show() {
-        axios.get('http://localhost:5000/token', {withCredentials: true, credentials: 'include'}).then(resp => {
+        axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
             console.log(resp.data)
         })
     }
 
-    function destroy(){
-        axios.get('http://localhost:5000/destroy', {withCredentials: true, credentials: 'include'}).then(resp => {
+    function destroy() {
+        axios.get('http://localhost:5000/destroy', { withCredentials: true, credentials: 'include' }).then(resp => {
             console.log('done');
         })
     }
 
+    function testPath() {
+        alert('test')
+    }
 
     return (
         <div className="App">
@@ -186,14 +198,54 @@ function App() {
                     </Button>
                     <p></p>
                     <Button
-                    style={{ marginTop: '10px'}}
-                    variant='contained'
-                    color='secondary'
-                    onClick={destroy}
+                        style={{ marginTop: '10px' }}
+                        variant='contained'
+                        color='secondary'
+                        onClick={destroy}
                     >
                         destroy
                     </Button>
+                    <p></p>
+                    <InboxIcon
+                        onClick={testPath}
+                    >
 
+                    </InboxIcon>
+                    <List>
+                        {task.map(taskNeat => <ListItem
+                            key={taskNeat.id}
+                            style={{
+                                textDecoration: taskNeat.status ? 'line-through' : 'none',
+                                backgroundColor: 'primary',
+                                borderRadius: '7px',
+                                marginTop: '10px',
+                                height: '38px',
+                                color: '#ffffff'
+                            }}
+                            onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
+                        >
+                            <ListItemButton
+                            style={{height: '38px'}}
+                            
+                            >
+                                <ListItemIcon
+                                >
+
+                                    <CheckIcon
+                                        style={{ color: '#ffffff' }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={taskNeat.task} />
+                                <ListItemIcon>
+                                    <DeleteIcon
+                                        style={{ color: '#ffffff' , marginLeft: '50px'}}
+                                    />
+
+                                </ListItemIcon>
+                            </ListItemButton>
+                        </ListItem>)}
+
+                    </List>
                 </div>
             </header>
         </div>
