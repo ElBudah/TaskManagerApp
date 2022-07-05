@@ -5,15 +5,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
-import Chip from '@mui/material/Chip';
-import InboxIcon from '@mui/icons-material/Inbox';
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import DraftsIcon from '@mui/icons-material/Drafts';
+
 
 
 
@@ -109,56 +105,44 @@ function App() {
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
                         <input {...register('task')} autoComplete='off' ></input>
                         <p></p>
-                        <Button type='submit' color='secondary' variant='contained'>Submit</Button>
+                        <Button type='submit' color='primary' variant='contained'>Submit</Button>
                     </form>
-                    {/* {task.map(taskNeat => <h2 key={taskNeat.id}>{taskNeat.task}</h2>)} */}
-                    {/* {task.map(taskNeat => <Card
-                        key={taskNeat.id}
-                        style={{ textDecoration: taskNeat.status ? 'line-through' : 'none' }}
-                        onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                        className="myCard">
 
-                        {taskNeat.task}
-                        <div className='interactions'>
-                            <DeleteIcon
-                                style={{ float: 'right', marginTop: '5px' }}
-                                color='primary'
-                                onClick={del}
-                            ></DeleteIcon>
-                            <CheckIcon
-                                style={{ float: 'right', marginTop: '5px' }}
-                                color='success'
-                                onClick={check}
+                    <List>
+                        {task.map(taskNeat => <ListItem
+                            key={taskNeat.id}
+                            style={{
+                                textDecoration: taskNeat.status ? 'line-through' : 'none',
+                                backgroundColor: '#2e77d1',
+                                borderRadius: '7px',
+                                marginTop: '10px',
+                                height: '38px',
+                                color: '#ffffff'
+                            }}
+                            onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
+                        >
+                            <ListItemButton
+                                style={{ height: '38px' }}
                             >
-                            </CheckIcon>
-                        </div>
-
-                    </Card>)} */}
-
-                    {/*  <Stack direction='column' spacing={1} marginTop='10px' >
-                        {task.map(taskNeat =>
-                            <Chip
-                                key={taskNeat.id}
-                                style={{ textDecoration: taskNeat.status ? 'line-through' : 'none' }}
-                                label={taskNeat.task}
-                                onDelete={del}
-                            >
-                                <DeleteIcon
-                                    style={{ float: 'right', marginTop: '5px' }}
-                                    color='primary'
-                                    onClick={del}
-                                ></DeleteIcon>
-                                <CheckIcon
-                                    style={{ float: 'right', marginTop: '5px' }}
-                                    color='success'
-                                    onClick={check}
+                                <ListItemIcon
                                 >
-                                </CheckIcon>
-                            </Chip>)}
-                    </Stack>
- */}
+                                    <CheckIcon
+                                        style={{ color: '#ffffff' }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={taskNeat.task} />
+                                <ListItemIcon>
+                                    <DeleteIcon
+                                        style={{ color: '#ffffff', marginLeft: '50px' }}
+                                    />
 
-                    <Stack
+                                </ListItemIcon>
+                            </ListItemButton>
+                        </ListItem>)}
+
+                    </List>
+
+                    {/* <Stack
                         direction='column'
                         spacing={1}
                         marginTop='10px'
@@ -174,12 +158,12 @@ function App() {
                         >
                             {taskNeat.task}
                         </Button>)}
-                    </Stack>
+                    </Stack> */}
 
                     <Button
                         style={{ marginTop: '10px' }}
                         variant='contained'
-                        color='secondary'
+                        color='primary'
                         onClick={log}>
                         Login
                     </Button>
@@ -187,7 +171,7 @@ function App() {
                     <Button
                         style={{ marginTop: '10px' }}
                         variant='contained'
-                        color='secondary'
+                        color='primary'
                         onClick={show}
                     >
                         Token
@@ -196,48 +180,14 @@ function App() {
                     <Button
                         style={{ marginTop: '10px' }}
                         variant='contained'
-                        color='secondary'
+                        color='primary'
                         onClick={destroy}
                     >
                         destroy
                     </Button>
                     <p></p>
-                    
-                    <List>
-                        {task.map(taskNeat => <ListItem
-                            key={taskNeat.id}
-                            style={{
-                                textDecoration: taskNeat.status ? 'line-through' : 'none',
-                                backgroundColor: 'primary',
-                                borderRadius: '7px',
-                                marginTop: '10px',
-                                height: '38px',
-                                color: '#ffffff'
-                            }}
-                            onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                        >
-                            <ListItemButton
-                            style={{height: '38px'}}
-                            
-                            >
-                                <ListItemIcon
-                                >
 
-                                    <CheckIcon
-                                        style={{ color: '#ffffff' }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText primary={taskNeat.task} />
-                                <ListItemIcon>
-                                    <DeleteIcon
-                                        style={{ color: '#ffffff' , marginLeft: '50px'}}
-                                    />
 
-                                </ListItemIcon>
-                            </ListItemButton>
-                        </ListItem>)}
-
-                    </List>
                 </div>
             </header>
         </div>
