@@ -1,8 +1,4 @@
-const express = require('express');
-const app = express();
 const jwt = require('jsonwebtoken');
-const cookie = require('cookie-parser');
-app.use(cookie());
 
 const addTask = async (req, res) => {
     const database = require('../db');
@@ -84,11 +80,20 @@ const jwtSign = async (req, res) => {
     const token = jwt.sign({ userID: 1 }, 'test123', { expiresIn: 7000 })
     console.log(token)
     res.cookie('token', token, {
-        httpOnly: true
+        httpOnly: true,
     }).send(token);
+}
+
+const getToken = async (req, res) => {
+    console.log("O valor do token é: " + req.cookies.token)
+    res.send("O valor do token é: " + req.cookies.token);
+}
+
+const destroy = async (req, res) => {
+    res.clearCookie('token').send('ok')
 }
 
 
 module.exports = {
-    addTask, getTask, deleteTask, doneTask, jwtSign
+    addTask, getTask, deleteTask, doneTask, jwtSign, getToken, destroy
 }

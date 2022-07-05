@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize('Tasks','sa','Automac@1', {
     dialect: 'mssql',
     host: 'localhost',
-    port: '49699',
+    port: '49758',
     pool: {
         max: 5,
         min: 0,

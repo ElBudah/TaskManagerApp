@@ -15,7 +15,7 @@ function App() {
 
     const onSubmitHandler = (data) => {
         console.log(data);
-        axios.post('http://localhost:5000/', data).then(response => {
+        axios.post('http://localhost:5000/', data, {withCredentials: true, credentials: 'include'}).then(response => {
 
         })
         reset();
@@ -74,10 +74,22 @@ function App() {
     }
 
     function log() {
-        axios.post('http://localhost:5000/login').then(resp => {
-                console.log(resp.data);
+        axios.post('http://localhost:5000/login', {}, {withCredentials: true, credentials: 'include'}).then(resp => {
+            console.log(resp.data);
         })
 
+    }
+
+    function show() {
+        axios.get('http://localhost:5000/token', {withCredentials: true, credentials: 'include'}).then(resp => {
+            console.log(resp.data)
+        })
+    }
+
+    function destroy(){
+        axios.get('http://localhost:5000/destroy', {withCredentials: true, credentials: 'include'}).then(resp => {
+            console.log('done');
+        })
     }
 
 
@@ -157,11 +169,29 @@ function App() {
                     </Stack>
 
                     <Button
-                    style ={{ marginTop : '10px'}}
+                        style={{ marginTop: '10px' }}
                         variant='contained'
                         color='secondary'
                         onClick={log}>
-                            Login
+                        Login
+                    </Button>
+                    <p></p>
+                    <Button
+                        style={{ marginTop: '10px' }}
+                        variant='contained'
+                        color='secondary'
+                        onClick={show}
+                    >
+                        Token
+                    </Button>
+                    <p></p>
+                    <Button
+                    style={{ marginTop: '10px'}}
+                    variant='contained'
+                    color='secondary'
+                    onClick={destroy}
+                    >
+                        destroy
                     </Button>
 
                 </div>
