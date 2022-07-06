@@ -1,7 +1,7 @@
-import { TextField, Button, Stack, ListItem, Card, CardContent, Typography, IconButton, Icon, createTheme } from '@mui/material';
+import { TextField, Button, Stack, ListItem, Card, CardContent, Typography, IconButton, Icon, createTheme, Toolbar } from '@mui/material';
 import './Style.css';
 import { formState, useForm } from 'react-hook-form'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
+import MenuTop from './Components/MenuTop';
 
 
 
@@ -98,51 +98,55 @@ function App() {
     }
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <h3>Enter your new Task</h3>
-                <div className='test'>
-                    <form onSubmit={handleSubmit(onSubmitHandler)}>
-                        <input {...register('task')} autoComplete='off' ></input>
-                        <p></p>
-                        <Button type='submit' color='primary' variant='contained'>Submit</Button>
-                    </form>
+        <Fragment>
+            <div className='login'>
+                <MenuTop></MenuTop>
+            </div>
+            <div className="App">
+                <header className="App-header">
+                    <div className='test'>
+                        <h3>Enter your new Task</h3>
+                        <form onSubmit={handleSubmit(onSubmitHandler)}>
+                            <input {...register('task')} autoComplete='off' ></input>
+                            <p></p>
+                            <Button type='submit' color='primary' variant='contained'>Submit</Button>
+                        </form>
 
-                    <List>
-                        {task.map(taskNeat => <ListItem
-                            key={taskNeat.id}
-                            style={{
-                                textDecoration: taskNeat.status ? 'line-through' : 'none',
-                                backgroundColor: '#2e77d1',
-                                borderRadius: '7px',
-                                marginTop: '10px',
-                                height: '38px',
-                                color: '#ffffff'
-                            }}
-                            onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                        >
-                            <ListItemButton
-                                style={{ height: '38px' }}
+                        <List>
+                            {task.map(taskNeat => <ListItem
+                                key={taskNeat.id}
+                                style={{
+                                    textDecoration: taskNeat.status ? 'line-through' : 'none',
+                                    backgroundColor: '#2e77d1',
+                                    borderRadius: '7px',
+                                    marginTop: '10px',
+                                    height: '38px',
+                                    color: '#ffffff'
+                                }}
+                                onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
                             >
-                                <ListItemIcon
+                                <ListItemButton
+                                    style={{ height: '38px' }}
                                 >
-                                    <CheckIcon
-                                        style={{ color: '#ffffff' }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText primary={taskNeat.task} />
-                                <ListItemIcon>
-                                    <DeleteIcon
-                                        style={{ color: '#ffffff', marginLeft: '50px' }}
-                                    />
+                                    <ListItemIcon
+                                    >
+                                        <CheckIcon
+                                            style={{ color: '#ffffff' }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary={taskNeat.task} />
+                                    <ListItemIcon>
+                                        <DeleteIcon
+                                            style={{ color: '#ffffff', marginLeft: '50px' }}
+                                        />
 
-                                </ListItemIcon>
-                            </ListItemButton>
-                        </ListItem>)}
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>)}
 
-                    </List>
+                        </List>
 
-                    {/* <Stack
+                        {/* <Stack
                         direction='column'
                         spacing={1}
                         marginTop='10px'
@@ -160,37 +164,38 @@ function App() {
                         </Button>)}
                     </Stack> */}
 
-                    <Button
-                        style={{ marginTop: '10px' }}
-                        variant='contained'
-                        color='primary'
-                        onClick={log}>
-                        Login
-                    </Button>
-                    <p></p>
-                    <Button
-                        style={{ marginTop: '10px' }}
-                        variant='contained'
-                        color='primary'
-                        onClick={show}
-                    >
-                        Token
-                    </Button>
-                    <p></p>
-                    <Button
-                        style={{ marginTop: '10px' }}
-                        variant='contained'
-                        color='primary'
-                        onClick={destroy}
-                    >
-                        destroy
-                    </Button>
-                    <p></p>
+                        <Button
+                            style={{ marginTop: '10px' }}
+                            variant='contained'
+                            color='primary'
+                            onClick={log}>
+                            Login
+                        </Button>
+                        <p></p>
+                        <Button
+                            style={{ marginTop: '10px' }}
+                            variant='contained'
+                            color='primary'
+                            onClick={show}
+                        >
+                            Token
+                        </Button>
+                        <p></p>
+                        <Button
+                            style={{ marginTop: '10px' }}
+                            variant='contained'
+                            color='primary'
+                            onClick={destroy}
+                        >
+                            destroy
+                        </Button>
+                        <p></p>
 
 
-                </div>
-            </header>
-        </div>
+                    </div>
+                </header>
+            </div>
+        </Fragment>
     );
 }
 
