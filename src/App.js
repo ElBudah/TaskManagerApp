@@ -19,17 +19,26 @@ function App() {
     const [task, setTask] = useState([]);
 
     const onSubmitHandler = (data) => {
-        console.log(data);
-        axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(resp => {
-            //Condition to check if user is authorized
-            if (resp.data.value == 'invalid') {
-                swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Not authorazied'
-                })
-            }
-        })
+
+        if (data.task == '') {
+            swal.fire({
+                icon: 'warning',
+                title: 'Invalid',
+                text: 'No data inserted!',
+                timer: 2000
+            })
+        } else {
+            axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(resp => {
+                //Condition to check if user is authorized
+                if (resp.data.value == 'invalid') {
+                    swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Not authorazied'
+                    })
+                }
+            })
+        }
         reset();
     }
 
@@ -67,7 +76,7 @@ function App() {
         let id = window.localStorage.getItem('id');
 
         axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log(resp.data.value);
+            
             if (resp.data.value == undefined) {
                 swal.fire({
                     icon: 'error',
@@ -92,7 +101,7 @@ function App() {
         let id = window.localStorage.getItem('id');
 
         axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log(resp.data.value);
+            
             if (resp.data.value == undefined) {
                 swal.fire({
                     icon: 'error',
@@ -120,14 +129,14 @@ function App() {
             <div className="App">
                 <header className="App-header">
                     <div className='test'>
-                        
+
                         <form onSubmit={handleSubmit(onSubmitHandler)}>
-                            <TextField {...register('task')} 
-                            autoComplete='off' 
-                            variant='standard' 
-                            placeholder='Enter your new task'
-                            
-                            style={{marginTop: '15px'}}
+                            <TextField {...register('task')}
+                                autoComplete='off'
+                                variant='standard'
+                                placeholder='Enter your new task'
+
+                                style={{ marginTop: '100px' }}
                             ></TextField>
                             <p></p>
                             <Button type='submit' color='primary' variant='contained'>Submit</Button>

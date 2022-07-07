@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import LogoutIcon from '@mui/icons-material/Logout';
 import swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import DoneTasks from './DoneTasks';
 
 export default function MenuTop() {
 
@@ -27,7 +29,7 @@ export default function MenuTop() {
     const submitData = (data) => {
         console.log(data);
         axios.post('http://localhost:5000/login', data, { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log("O valor do nome: "+ resp.data.value);
+            console.log("O valor do nome: " + resp.data.value);
             setUser(resp.data.name);
             if (resp.data.value == 'invalid') {
                 swal.fire({
@@ -100,7 +102,9 @@ export default function MenuTop() {
                         />
                         <Typography
                             marginLeft={'15px'}
+                            flex={1}
                         >{user}</Typography>
+                        <DoneTasks />
                     </Toolbar>
                 </form>
 

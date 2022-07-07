@@ -51,7 +51,7 @@ const deleteTask = async (req, res) => {
 
 }
 
-const doneTask = async (req, res) => {
+const checkTask = async (req, res) => {
     const database = require('../db');
     const Task = require('../tasks');
     await database.sync();
@@ -76,23 +76,30 @@ const doneTask = async (req, res) => {
     res.send('ok');
 }
 
-
 const getToken = async (req, res) => {
     console.log("O valor do token é: " + req.cookies.token)
     res.json({value: req.cookies.token});
 }
 
-const destroy = async (req, res) => {
-    res.clearCookie('token').send('ok')
-}
+const doneTasks = async(req,res) => {
+    const database = require('../db');
+    const Task = require('../tasks');
 
-const user = async (req,res) => {
-    
+    await database.sync();
+
+    const DoneData = await Task.findAll({
+        where: {
+            status: 1
+        }
+    })
+
+    console.log(DoneData.task);
     res.json({
-        name: 'Ricardo'
+        value: DoneData
     })
 }
 
+
 module.exports = {
-    addTask, getTask, deleteTask, doneTask, getToken, destroy, user
+    addTask, getTask, deleteTask, checkTask, getToken, doneTasks
 }
