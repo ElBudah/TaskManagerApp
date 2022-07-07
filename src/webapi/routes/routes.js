@@ -16,15 +16,20 @@ const verifyJWT = (req, res, next) => {
     })
 }
 
-const { addTask, getTask, deleteTask, doneTask, jwtSign, getToken, destroy } = require('../controller/tasks');
+const { addTask, getTask, deleteTask, doneTask, jwtSign, getToken, destroy, user } = require('../controller/tasks');
+const { login, logout } = require('../controller/users');
 
 router.post('/', verifyJWT, addTask).get('/', getTask);
 router.delete('/delete', deleteTask);
 router.delete('/done', doneTask);
 
-router.post('/login', jwtSign);
+/* router.post('/login', jwtSign); */
 router.get('/token', getToken);
-router.get('/destroy', destroy);
+/* router.get('/destroy', destroy); */
+
+//user rotes
+router.post('/login', login);
+router.get('/logout', logout);
 
 
 module.exports = router;

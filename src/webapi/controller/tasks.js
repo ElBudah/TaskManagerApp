@@ -76,27 +76,6 @@ const doneTask = async (req, res) => {
     res.send('ok');
 }
 
-const jwtSign = async (req, res) => {
-
-    let txtName = req.body.txtName;
-    let txtPassword = req.body.txtPassword;
-
-    console.log(txtName);
-    console.log(txtPassword);
-
-    if (txtName == 'Ricardo' || txtPassword == 'teste') {
-        const token = jwt.sign({ userID: 1 }, 'test123', { expiresIn: 7000 })
-        console.log(token)
-        res.cookie('token', token, {
-            httpOnly: true,
-        }).send(token);
-
-    }else{
-        res.json({value: 'zero'})
-    }
-
-
-}
 
 const getToken = async (req, res) => {
     console.log("O valor do token é: " + req.cookies.token)
@@ -107,7 +86,13 @@ const destroy = async (req, res) => {
     res.clearCookie('token').send('ok')
 }
 
+const user = async (req,res) => {
+    
+    res.json({
+        name: 'Ricardo'
+    })
+}
 
 module.exports = {
-    addTask, getTask, deleteTask, doneTask, jwtSign, getToken, destroy
+    addTask, getTask, deleteTask, doneTask, getToken, destroy, user
 }

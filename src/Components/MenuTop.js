@@ -10,10 +10,13 @@ import { Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import LogoutIcon from '@mui/icons-material/Logout';
 import swal from 'sweetalert2';
+import { useEffect, useState } from 'react';
 
 export default function MenuTop() {
 
     const { register, reset, handleSubmit } = useForm({});
+
+    const [user, setUser] = useState([])
 
     function login() {
         /* axios.post('http://localhost:5000/login', data , { withCredentials: true, credentials: 'include' }).then(resp => {
@@ -24,12 +27,14 @@ export default function MenuTop() {
     const submitData = (data) => {
         console.log(data);
         axios.post('http://localhost:5000/login', data, { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log(resp.data);
-            if(resp.data.value == 'zero'){
+            console.log("O valor do nome: "+ resp.data.value);
+            setUser(resp.data.name);
+            if (resp.data.value == 'invalid') {
                 swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Invalid User'
+                    text: 'Invalid User',
+                    timer: 2000
                 })
             }
         })
@@ -37,8 +42,21 @@ export default function MenuTop() {
     }
 
     function logout() {
-
+        axios.get('http://localhost:5000/logout', { withCredentials: true, credentials: 'include' }).then(resp => {
+            console.log('done');
+            setUser('');
+        })
     }
+
+    /* const clock = 3000;
+    useEffect(() => {
+        const id = setInterval(() => {
+            axios.get('http://localhost:5000/user', { withCredentials: true, credentials: 'include' }).then(resp => {
+                setUser(resp.data)
+            })
+        }, clock);
+        return () => clearInterval(id);
+    }, [user]); */
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -48,12 +66,20 @@ export default function MenuTop() {
                     <Toolbar
                     >
                         <Button
-                            style={{ color: 'white', fontSize: '17px', float: 'left' }}
+                            style={{ color: 'white', fontSize: '13px', float: 'left' }}
                             type='submit'
                             variant='contained'
-                            sx={{ border: '2px solid' }}
+                            sx={{ border: '1px solid' }}
                         >
                             Login
+                        </Button>
+                        <Button
+                            style={{ color: 'white', fontSize: '13px', float: 'left', marginLeft: '5px' }}
+                            onClick={logout}
+                            variant='contained'
+                            sx={{ border: '1px solid' }}
+                        >
+                            Logout
                         </Button>
                         <TextField
                             variant='standard'
@@ -72,8 +98,12 @@ export default function MenuTop() {
                             {...register('txtPassword')}
                             autoComplete='off'
                         />
+                        <Typography
+                            marginLeft={'15px'}
+                        >{user}</Typography>
                     </Toolbar>
                 </form>
+
             </AppBar>
         </Box>
     );

@@ -21,7 +21,7 @@ function App() {
     const onSubmitHandler = (data) => {
         console.log(data);
         axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log('O valor de retorno foi: ' + resp.data.value);
+            //Condition to check if user is authorized
             if (resp.data.value == 'invalid') {
                 swal.fire({
                     icon: 'error',
@@ -55,7 +55,6 @@ function App() {
                 } else {
                     setTask(resp.data);
                 }
-
             })
         }, clock);
         return () => clearInterval(id);
@@ -84,159 +83,94 @@ function App() {
                 }).then(response => {
 
                 })
-
             }
-
-
         })
     }
 
     //Finish task function
     function check() {
-                let id = window.localStorage.getItem('id');
+        let id = window.localStorage.getItem('id');
 
-                axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
-                    console.log(resp.data.value);
-                    if (resp.data.value == undefined) {
-                        swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Not Authorized',
-                            timer: 2000
-                        })
-                    } else {
-                        axios.delete('http://localhost:5000/done', {
-                            data: {
-                                idselected: id
-                            }
-                        }).then(resp => {
-
-                        })
+        axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
+            console.log(resp.data.value);
+            if (resp.data.value == undefined) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Not Authorized',
+                    timer: 2000
+                })
+            } else {
+                axios.delete('http://localhost:5000/done', {
+                    data: {
+                        idselected: id
                     }
-                })
+                }).then(resp => {
 
-
-            }
-
-    function log() {
-                axios.post('http://localhost:5000/login', {}, { withCredentials: true, credentials: 'include' }).then(resp => {
-                    console.log(resp.data);
-                })
-
-            }
-
-    function show() {
-                axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
-                    console.log(resp.data)
                 })
             }
-
-    function destroy() {
-                axios.get('http://localhost:5000/destroy', { withCredentials: true, credentials: 'include' }).then(resp => {
-                    console.log('done');
-                })
-            }
-
-    return (
-            <Fragment>
-                <div className='login'>
-                    <MenuTop></MenuTop>
-                </div>
-                <div className="App">
-                    <header className="App-header">
-                        <div className='test'>
-                            <h3>Enter your new Task</h3>
-                            <form onSubmit={handleSubmit(onSubmitHandler)}>
-                                <input {...register('task')} autoComplete='off' ></input>
-                                <p></p>
-                                <Button type='submit' color='primary' variant='contained'>Submit</Button>
-                            </form>
-
-                            <List>
-                                {task.map(taskNeat => <ListItem
-                                    key={taskNeat.id}
-                                    style={{
-                                        textDecoration: taskNeat.status ? 'line-through' : 'none',
-                                        backgroundColor: '#2e77d1',
-                                        borderRadius: '7px',
-                                        marginTop: '10px',
-                                        height: '38px',
-                                        color: '#ffffff'
-                                    }}
-                                    onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                                >
-                                    <ListItemButton
-                                        style={{ height: '38px' }}
-                                    >
-                                        <ListItemIcon
-                                        >
-                                            <CheckIcon
-                                                style={{ color: '#ffffff' }}
-                                                onClick={check}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText primary={taskNeat.task} />
-                                        <ListItemIcon>
-                                            <DeleteIcon
-                                                style={{ color: '#ffffff', marginLeft: '50px' }}
-                                                onClick={del}
-                                            />
-
-                                        </ListItemIcon>
-                                    </ListItemButton>
-                                </ListItem>)}
-
-                            </List>
-
-                            {/* <Stack
-                        direction='column'
-                        spacing={1}
-                        marginTop='10px'
-                    >
-                        {task.map(taskNeat => <Button
-                            key={taskNeat.id}
-                            color='primary'
-                            variant='contained'
-                            style={{ textDecoration: taskNeat.status ? 'line-through' : 'none' }}
-                            onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                            startIcon={<CheckIcon onClick={check}></CheckIcon>}
-                            endIcon={<DeleteIcon onClick={del}></DeleteIcon>}
-                        >
-                            {taskNeat.task}
-                        </Button>)}
-                    </Stack> */}
-
-                            <Button
-                                style={{ marginTop: '10px' }}
-                                variant='contained'
-                                color='primary'
-                                onClick={log}>
-                                Login
-                            </Button>
-                            <p></p>
-                            <Button
-                                style={{ marginTop: '10px' }}
-                                variant='contained'
-                                color='primary'
-                                onClick={show}
-                            >
-                                Token
-                            </Button>
-                            <p></p>
-                            <Button
-                                style={{ marginTop: '10px' }}
-                                variant='contained'
-                                color='primary'
-                                onClick={destroy}
-                            >
-                                destroy
-                            </Button>
-                            <p></p>
-                        </div>
-                    </header>
-                </div>
-            </Fragment>
-        );
+        })
     }
 
-    export default App;
+    return (
+        <Fragment>
+            <div className='login'>
+                <MenuTop></MenuTop>
+            </div>
+            <div className="App">
+                <header className="App-header">
+                    <div className='test'>
+                        
+                        <form onSubmit={handleSubmit(onSubmitHandler)}>
+                            <TextField {...register('task')} 
+                            autoComplete='off' 
+                            variant='standard' 
+                            placeholder='Enter your new task'
+                            
+                            style={{marginTop: '15px'}}
+                            ></TextField>
+                            <p></p>
+                            <Button type='submit' color='primary' variant='contained'>Submit</Button>
+                        </form>
+
+                        <List>
+                            {task.map(taskNeat => <ListItem
+                                key={taskNeat.id}
+                                style={{
+                                    textDecoration: taskNeat.status ? 'line-through' : 'none',
+                                    backgroundColor: '#2e77d1',
+                                    borderRadius: '7px',
+                                    marginTop: '10px',
+                                    height: '38px',
+                                    color: '#ffffff'
+                                }}
+                                onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
+                            >
+                                <ListItemButton
+                                    style={{ height: '38px' }}
+                                >
+                                    <ListItemIcon
+                                    >
+                                        <CheckIcon
+                                            style={{ color: '#ffffff' }}
+                                            onClick={check}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary={taskNeat.task} />
+                                    <ListItemIcon>
+                                        <DeleteIcon
+                                            style={{ color: '#ffffff', marginLeft: '50px' }}
+                                            onClick={del}
+                                        />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>)}
+                        </List>
+                    </div>
+                </header>
+            </div>
+        </Fragment>
+    );
+}
+
+export default App;
