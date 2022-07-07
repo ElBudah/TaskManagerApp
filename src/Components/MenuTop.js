@@ -8,6 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import LogoutIcon from '@mui/icons-material/Logout';
+import swal from 'sweetalert2';
 
 export default function MenuTop() {
 
@@ -23,19 +25,30 @@ export default function MenuTop() {
         console.log(data);
         axios.post('http://localhost:5000/login', data, { withCredentials: true, credentials: 'include' }).then(resp => {
             console.log(resp.data);
+            if(resp.data.value == 'zero'){
+                swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Invalid User'
+                })
+            }
         })
         reset();
+    }
+
+    function logout() {
+
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar>
-                    <form onSubmit={handleSubmit(submitData)}
-                    
+                <form onSubmit={handleSubmit(submitData)}
+                >
+                    <Toolbar
                     >
                         <Button
-                            style={{ color: 'white', fontSize: '17px' }}
+                            style={{ color: 'white', fontSize: '17px', float: 'left' }}
                             type='submit'
                             variant='contained'
                             sx={{ border: '2px solid' }}
@@ -59,9 +72,8 @@ export default function MenuTop() {
                             {...register('txtPassword')}
                             autoComplete='off'
                         />
-                    </form>
-
-                </Toolbar>
+                    </Toolbar>
+                </form>
             </AppBar>
         </Box>
     );

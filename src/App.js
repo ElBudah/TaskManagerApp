@@ -10,7 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuTop from './Components/MenuTop';
-
+import swal from 'sweetalert2';
 
 
 function App() {
@@ -20,8 +20,15 @@ function App() {
 
     const onSubmitHandler = (data) => {
         console.log(data);
-        axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(response => {
-
+        axios.post('http://localhost:5000/', data, { withCredentials: true, credentials: 'include' }).then(resp => {
+            console.log('O valor de retorno foi: ' + resp.data.value);
+            if (resp.data.value == 'invalid') {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Not authorazied'
+                })
+            }
         })
         reset();
     }
@@ -42,8 +49,13 @@ function App() {
     const clock = 5000;
     useEffect(() => {
         const id = setInterval(() => {
-            axios.get('http://localhost:5000/').then(resp => {
-                setTask(resp.data);
+            axios.get('http://localhost:5000/', { withCredentials: true, credentials: 'include' }).then(resp => {
+                if (resp.data == null) {
+                    setTask('');
+                } else {
+                    setTask(resp.data);
+                }
+
             })
         }, clock);
         return () => clearInterval(id);
@@ -55,98 +67,128 @@ function App() {
 
         let id = window.localStorage.getItem('id');
 
-        axios.delete('http://localhost:5000/delete', {
-            data: {
-                idselected: id
+        axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
+            console.log(resp.data.value);
+            if (resp.data.value == undefined) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Not Authorized',
+                    timer: 2000
+                })
+            } else {
+                axios.delete('http://localhost:5000/delete', {
+                    data: {
+                        idselected: id
+                    }
+                }).then(response => {
+
+                })
+
             }
-        }).then(response => {
+
 
         })
     }
-
 
     //Finish task function
     function check() {
-        let id = window.localStorage.getItem('id');
+                let id = window.localStorage.getItem('id');
 
-        axios.delete('http://localhost:5000/done', {
-            data: {
-                idselected: id
+                axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
+                    console.log(resp.data.value);
+                    if (resp.data.value == undefined) {
+                        swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Not Authorized',
+                            timer: 2000
+                        })
+                    } else {
+                        axios.delete('http://localhost:5000/done', {
+                            data: {
+                                idselected: id
+                            }
+                        }).then(resp => {
+
+                        })
+                    }
+                })
+
+
             }
-        }).then(resp => {
-
-        })
-    }
 
     function log() {
-        axios.post('http://localhost:5000/login', {}, { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log(resp.data);
-        })
+                axios.post('http://localhost:5000/login', {}, { withCredentials: true, credentials: 'include' }).then(resp => {
+                    console.log(resp.data);
+                })
 
-    }
+            }
 
     function show() {
-        axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log(resp.data)
-        })
-    }
+                axios.get('http://localhost:5000/token', { withCredentials: true, credentials: 'include' }).then(resp => {
+                    console.log(resp.data)
+                })
+            }
 
     function destroy() {
-        axios.get('http://localhost:5000/destroy', { withCredentials: true, credentials: 'include' }).then(resp => {
-            console.log('done');
-        })
-    }
+                axios.get('http://localhost:5000/destroy', { withCredentials: true, credentials: 'include' }).then(resp => {
+                    console.log('done');
+                })
+            }
 
     return (
-        <Fragment>
-            <div className='login'>
-                <MenuTop></MenuTop>
-            </div>
-            <div className="App">
-                <header className="App-header">
-                    <div className='test'>
-                        <h3>Enter your new Task</h3>
-                        <form onSubmit={handleSubmit(onSubmitHandler)}>
-                            <input {...register('task')} autoComplete='off' ></input>
-                            <p></p>
-                            <Button type='submit' color='primary' variant='contained'>Submit</Button>
-                        </form>
+            <Fragment>
+                <div className='login'>
+                    <MenuTop></MenuTop>
+                </div>
+                <div className="App">
+                    <header className="App-header">
+                        <div className='test'>
+                            <h3>Enter your new Task</h3>
+                            <form onSubmit={handleSubmit(onSubmitHandler)}>
+                                <input {...register('task')} autoComplete='off' ></input>
+                                <p></p>
+                                <Button type='submit' color='primary' variant='contained'>Submit</Button>
+                            </form>
 
-                        <List>
-                            {task.map(taskNeat => <ListItem
-                                key={taskNeat.id}
-                                style={{
-                                    textDecoration: taskNeat.status ? 'line-through' : 'none',
-                                    backgroundColor: '#2e77d1',
-                                    borderRadius: '7px',
-                                    marginTop: '10px',
-                                    height: '38px',
-                                    color: '#ffffff'
-                                }}
-                                onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
-                            >
-                                <ListItemButton
-                                    style={{ height: '38px' }}
+                            <List>
+                                {task.map(taskNeat => <ListItem
+                                    key={taskNeat.id}
+                                    style={{
+                                        textDecoration: taskNeat.status ? 'line-through' : 'none',
+                                        backgroundColor: '#2e77d1',
+                                        borderRadius: '7px',
+                                        marginTop: '10px',
+                                        height: '38px',
+                                        color: '#ffffff'
+                                    }}
+                                    onMouseOver={(itemID) => window.localStorage.setItem('id', taskNeat.id)}
                                 >
-                                    <ListItemIcon
+                                    <ListItemButton
+                                        style={{ height: '38px' }}
                                     >
-                                        <CheckIcon
-                                            style={{ color: '#ffffff' }}
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText primary={taskNeat.task} />
-                                    <ListItemIcon>
-                                        <DeleteIcon
-                                            style={{ color: '#ffffff', marginLeft: '50px' }}
-                                        />
+                                        <ListItemIcon
+                                        >
+                                            <CheckIcon
+                                                style={{ color: '#ffffff' }}
+                                                onClick={check}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary={taskNeat.task} />
+                                        <ListItemIcon>
+                                            <DeleteIcon
+                                                style={{ color: '#ffffff', marginLeft: '50px' }}
+                                                onClick={del}
+                                            />
 
-                                    </ListItemIcon>
-                                </ListItemButton>
-                            </ListItem>)}
+                                        </ListItemIcon>
+                                    </ListItemButton>
+                                </ListItem>)}
 
-                        </List>
+                            </List>
 
-                        {/* <Stack
+                            {/* <Stack
                         direction='column'
                         spacing={1}
                         marginTop='10px'
@@ -164,39 +206,37 @@ function App() {
                         </Button>)}
                     </Stack> */}
 
-                        <Button
-                            style={{ marginTop: '10px' }}
-                            variant='contained'
-                            color='primary'
-                            onClick={log}>
-                            Login
-                        </Button>
-                        <p></p>
-                        <Button
-                            style={{ marginTop: '10px' }}
-                            variant='contained'
-                            color='primary'
-                            onClick={show}
-                        >
-                            Token
-                        </Button>
-                        <p></p>
-                        <Button
-                            style={{ marginTop: '10px' }}
-                            variant='contained'
-                            color='primary'
-                            onClick={destroy}
-                        >
-                            destroy
-                        </Button>
-                        <p></p>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                variant='contained'
+                                color='primary'
+                                onClick={log}>
+                                Login
+                            </Button>
+                            <p></p>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                variant='contained'
+                                color='primary'
+                                onClick={show}
+                            >
+                                Token
+                            </Button>
+                            <p></p>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                variant='contained'
+                                color='primary'
+                                onClick={destroy}
+                            >
+                                destroy
+                            </Button>
+                            <p></p>
+                        </div>
+                    </header>
+                </div>
+            </Fragment>
+        );
+    }
 
-
-                    </div>
-                </header>
-            </div>
-        </Fragment>
-    );
-}
-
-export default App;
+    export default App;

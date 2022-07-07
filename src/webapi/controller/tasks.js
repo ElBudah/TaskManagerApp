@@ -77,16 +77,30 @@ const doneTask = async (req, res) => {
 }
 
 const jwtSign = async (req, res) => {
-    const token = jwt.sign({ userID: 1 }, 'test123', { expiresIn: 7000 })
-    console.log(token)
-    res.cookie('token', token, {
-        httpOnly: true,
-    }).send(token);
+
+    let txtName = req.body.txtName;
+    let txtPassword = req.body.txtPassword;
+
+    console.log(txtName);
+    console.log(txtPassword);
+
+    if (txtName == 'Ricardo' || txtPassword == 'teste') {
+        const token = jwt.sign({ userID: 1 }, 'test123', { expiresIn: 7000 })
+        console.log(token)
+        res.cookie('token', token, {
+            httpOnly: true,
+        }).send(token);
+
+    }else{
+        res.json({value: 'zero'})
+    }
+
+
 }
 
 const getToken = async (req, res) => {
     console.log("O valor do token é: " + req.cookies.token)
-    res.send("O valor do token é: " + req.cookies.token);
+    res.json({value: req.cookies.token});
 }
 
 const destroy = async (req, res) => {
